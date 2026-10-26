@@ -1,0 +1,136 @@
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    margin: 40px;
+}
+
+/* Headings */
+h1 {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+h1.page-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+/* Add to Cart page */
+.form-box {
+    display: inline-block;
+}
+
+.field-row {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 6px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field label {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.field input {
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid #999;
+    padding: 6px 10px;
+    width: 140px;
+}
+
+/* Tables (Shopping Cart + Checkout) */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 900px;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 14px;
+}
+
+th {
+    background: #f5f5f5;
+    font-weight: bold;
+}
+
+.qty-input {
+    width: 50px;
+    padding: 4px;
+}
+
+/* Buttons */
+button {
+    font-family: 'Courier New', Courier, monospace;
+    padding: 6px 20px;
+    border: 1px solid #666;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e0e0e0;
+}
+
+/* Cart Summary box (Shopping Cart page) */
+#cart-summary {
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid #333;
+    display: inline-block;
+    padding: 16px 24px;
+    margin-top: 20px;
+}
+
+#cart-summary h2 {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+}
+
+#cart-summary p {
+    margin: 4px 0;
+}
+
+#checkout-btn {
+    margin-top: 12px;
+}
+
+/* Checkout page */
+#checkout-box {
+    border: 1px solid #333;
+    max-width: 700px;
+    padding: 24px;
+}
+
+#checkout-summary {
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 20px;
+}
+
+#checkout-summary p {
+    margin: 4px 0;
+}
+
+#checkout-summary h3 {
+    margin-top: 12px;
+}
+
+.place-order-row {
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* Messages */
+#error-message, #success-message {
+    font-family: Georgia, 'Times New Roman', serif;
+    margin-top: 14px;
+}

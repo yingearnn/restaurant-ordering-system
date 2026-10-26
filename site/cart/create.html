@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="../js/demo-api.js"></script>
+    <meta charset="UTF-8">
+    <title>Add to Cart</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cart-pages.css">
+</head>
+<body>
+    <a href="../products.html" style="display:inline-block; margin-bottom:16px; font-family:'Courier New', Courier, monospace;">&larr; Back to Products</a>
+    <h1>Add Cart Items</h1>
+
+    <form id="add-cart-form">
+        <label for="product_id">Product Id</label>
+        <input type="number" id="product_id" name="product_id" required>
+
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="quantity" min="1" required>
+
+        <button type="submit">Add</button>
+    </form>
+
+    <p id="error-message" style="color: red;"></p>
+    <p id="success-message" style="color: green;"></p>
+
+    <script src="../js/cart.js"></script>
+</body>
+</html>

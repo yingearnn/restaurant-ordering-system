@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="../js/demo-api.js"></script>
+    <meta charset="UTF-8">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cart-pages.css">
+</head>
+<body>
+    <a href="../products.html" style="display:inline-block; margin-bottom:16px; font-family:'Courier New', Courier, monospace;">&larr; Back to Products</a>
+    <h1>Shopping Cart</h1>
+
+    <table id="cart-table">
+        <thead>
+            <tr>
+                <th>Product Description</th>
+                <th>Sub-total Price</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Update Quantity</th>
+                <th>Delete Item</th>
+            </tr>
+        </thead>
+        <tbody id="cart-table-body">
+        </tbody>
+    </table>
+
+    <div id="cart-summary">
+        <h2>Cart Summary</h2>
+        <p>Total Quantity: <span id="summary-quantity">0</span></p>
+        <p>Total Checkout Price: <span id="summary-price">0.00</span></p>
+        <button id="checkout-btn">Checkout</button>
+    </div>
+
+    <p id="error-message" style="color: red;"></p>
+
+    <script src="../js/cart.js"></script>
+</body>
+</html>

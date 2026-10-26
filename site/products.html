@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="js/demo-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - Member View</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #add-cart-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #add-cart-modal-box {
+      background: #fff;
+      border: 1px solid #333;
+      padding: 24px;
+      width: 320px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #add-cart-modal-box h2 {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    #add-cart-modal-box label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    #add-cart-modal-box input {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid #999;
+      margin-bottom: 16px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #add-cart-modal-box .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    #add-cart-modal-box button {
+      font-family: 'Courier New', Courier, monospace;
+      padding: 6px 16px;
+      border: 1px solid #666;
+      background: #f0f0f0;
+      cursor: pointer;
+    }
+
+    #add-cart-modal-box button:hover {
+      background: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Restaurant Ordering System</a>
+      <div class="navbar-nav ms-auto align-items-center">
+        <span class="navbar-text me-3">Welcome, Member</span>
+        <a href="my-feedback.html" class="btn btn-outline-warning btn-sm me-2">My Feedback</a>
+        <a href="cart/retrieve-all.html" class="btn btn-outline-info btn-sm me-2">My Cart</a>
+        <a href="login.html" class="btn btn-outline-light btn-sm">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Available Products</h4>
+
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Price ($)</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Details</th>
+                <th>Add to Cart</th>
+              </tr>
+            </thead>
+            <tbody id="product-table-body"></tbody>
+          </table>
+        </div>
+
+        <div id="no-products" class="alert alert-info mt-3" style="display: none;">
+          No products available.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add to Cart modal -->
+  <div id="add-cart-modal-overlay">
+    <div id="add-cart-modal-box">
+      <h2>Add Cart Items for <span id="modal-product-name"></span></h2>
+
+      <label for="modal-quantity">Quantity</label>
+      <input type="number" id="modal-quantity" min="1" value="1">
+
+      <p id="modal-error" style="color: red; font-family: Georgia, serif;"></p>
+
+      <div class="modal-buttons">
+        <button id="modal-add-btn">Add</button>
+        <button id="modal-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', fetchProducts);
+
+    let selectedProductId = null;
+
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/products');
+        const data = await response.json();
+
+        const tbody      = document.getElementById('product-table-body');
+        const noProducts = document.getElementById('no-products');
+
+        tbody.innerHTML = '';
+
+        if (!data.success || data.products.length === 0) {
+          noProducts.style.display = 'block';
+          return;
+        }
+
+        data.products.forEach(product => {
+          const row = document.createElement('tr');
+
+          row.innerHTML = `
+            <td>${product.name}</td>
+            <td>${product.description || '-'}</td>
+            <td>${product.category || '-'}</td>
+            <td>${parseFloat(product.price).toFixed(2)}</td>
+            <td>
+              <span class="badge ${product.is_available ? 'bg-success' : 'bg-secondary'}">
+                ${product.is_available ? 'Available' : 'Unavailable'}
+              </span>
+            </td>
+            <td>${new Date(product.created_at).toLocaleDateString()}</td>
+            <td>
+              <a href="product-detail.html?id=${product.product_id}" class="btn btn-primary btn-sm">
+                View Details
+              </a>
+            </td>
+            <td>
+              <button class="btn btn-success btn-sm" ${product.is_available ? '' : 'disabled'}
+                onclick="openAddCartModal(${product.product_id}, '${product.name.replace(/'/g, "\\'")}')">
+                Add
+              </button>
+            </td>
+          `;
+
+          tbody.appendChild(row);
+        });
+
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        alert('Failed to load products.');
+      }
+    }
+
+    function openAddCartModal(productId, productName) {
+      selectedProductId = productId;
+      document.getElementById('modal-product-name').textContent = productName;
+      document.getElementById('modal-quantity').value = 1;
+      document.getElementById('modal-error').textContent = '';
+      document.getElementById('modal-error').style.color = 'red';
+      document.getElementById('add-cart-modal-overlay').style.display = 'flex';
+    }
+
+    function closeAddCartModal() {
+      document.getElementById('add-cart-modal-overlay').style.display = 'none';
+      selectedProductId = null;
+    }
+
+    document.getElementById('modal-cancel-btn').addEventListener('click', closeAddCartModal);
+
+    document.getElementById('modal-add-btn').addEventListener('click', async () => {
+      const quantity = Number(document.getElementById('modal-quantity').value);
+      const errorEl = document.getElementById('modal-error');
+      errorEl.textContent = '';
+
+      if (!quantity || quantity <= 0) {
+        errorEl.style.color = 'red';
+        errorEl.textContent = 'Enter a valid quantity';
+        return;
+      }
+
+      try {
+        const res = await fetch('/cart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product_id: selectedProductId, quantity })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          errorEl.style.color = 'red';
+          errorEl.textContent = data.message || 'Failed to add item to cart';
+          return;
+        }
+
+        errorEl.style.color = 'green';
+        errorEl.textContent = 'Item added to cart successfully';
+        setTimeout(() => {
+       closeAddCartModal();
+      }, 1000);
+
+      } catch (error) {
+        errorEl.style.color = 'red';
+        errorEl.textContent = 'Something went wrong. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>
